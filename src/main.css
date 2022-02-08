@@ -1,0 +1,14 @@
+body {
+    margin: 0 auto;
+    padding: 0 2px;
+    background: cyan;
+    transform: rotate(-45deg);
+}
+
+#imgBox {
+    height: 400px;
+    width: 400px;
+    background: url('../public/logo.png');
+    background-size: contain;
+  }
+  
