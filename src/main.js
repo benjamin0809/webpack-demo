@@ -13,4 +13,4 @@ btn.onclick = () => {
 document.body.appendChild(btn)
 
 // 这是注释
-console.log(88888)
+console.log11(88888)

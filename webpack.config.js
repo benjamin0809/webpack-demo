@@ -6,6 +6,10 @@ const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const RmFilePlugin = require("./plugins/RmFilePlugin");
 const DelCommentPlugin = require("./plugins/DelCommentPlugin");
+const QiniuUploadPlugin = require("./plugins/QiniuUploadPlugin");
+
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const PurgecssWebpackPlugin = require('purgecss-webpack-plugin') 
 
 const config = {
   mode: "development",
@@ -14,9 +18,9 @@ const config = {
     // clean: true,
     filename: "[name].[contenthash].js",
     path: path.join(__dirname, "dist"),
-    // publicPath: 'https://cdn.example.com/assets/[fullhash]/',
+    publicPath: 'https://cdn.popochiu.com/',
   },
-  //   devtool: "source-map",
+  devtool: "source-map",
   devServer: {
     static: path.resolve(__dirname, "public"),
     compress: true,
@@ -111,8 +115,16 @@ const config = {
         ],
       },
     ],
-  },
+  },// const accessKey = 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP';
+  // const secretKey = 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-';
+  // const bucket = 'benjamin0809-cdn';
   plugins: [
+      new QiniuUploadPlugin({
+        accessKey : 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP',
+        secretKey : 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-',
+        bucket : 'benjamin0809-cdn',
+        publicBucketDomain: 'https://cdn.popochiu.com'
+      }),
     new DelCommentPlugin(),
     new RmFilePlugin(),
     new MomentLocalesPlugin(),
@@ -123,10 +135,11 @@ const config = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
+    // new BundleAnalyzerPlugin()
   ],
-  //   resolveLoader: {
-  //     modules: ["loaders", "node_modules"],
-  //   },
+    resolveLoader: {
+      modules: ["loaders", "node_modules"],
+    },
 };
 
 module.exports = (env, argv) => {

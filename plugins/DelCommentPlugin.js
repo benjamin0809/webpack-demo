@@ -18,9 +18,9 @@ class DelCommentPlugin {
               if (Object.hasOwnProperty.call(assets, name)) {
                 const asset = compilation.getAsset(name);
                 const contents = asset.source.source();
-                console.log('before contents:', contents)
+                // console.log('before contents:', contents)
                 const result = contents.replace(/\/\/.*/g, "").replace(/\/\*.*?\*\//g, "");//删除注释
-                console.log('after remove comment contents:', result)
+                // console.log('after remove comment contents:', result)
                 compilation.updateAsset(name, new sources.RawSource(result));
               }
             }
@@ -28,6 +28,14 @@ class DelCommentPlugin {
         }
       );
     });
+
+    compiler.hooks.initialize.tap("DelCommentPlugin", (compilation) => {
+        console.log('初始化插件》》DelCommentPlugin')
+    })
+
+    compiler.hooks.run.tap("DelCommentPlugin", (compilation) => {
+        console.log('run插件》》DelCommentPlugin')
+    })
   }
 }
 
