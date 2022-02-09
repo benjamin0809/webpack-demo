@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2022-02-09 19:21:53
+ * @LastEditTime: 2022-02-09 22:37:49
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \webpack-demo\plugins\QiniuUploadPlugin.js
+ */
 const { sources } = require("webpack");
 const Qiniu = require("./qiniu");
 class QiniuUploadPlugin {
@@ -21,13 +29,17 @@ class QiniuUploadPlugin {
     }
   }
   apply(compiler) {
+    compiler.hooks.emit.tap("QiniuUploadPlugin", () => {
+      console.log('emit')
+    })
     compiler.hooks.assetEmitted.tap(
       "QiniuUploadPlugin",
       (file, { content, source, outputPath, compilation, targetPath }) => {
         // content
         // console.log(file, { source, outputPath, compilation, targetPath });
-        if (file.endsWith(".js") || file.endsWith(".css")) {
-          this.QN_Instance.put(content, file).then(console.log);
+        console.log('开始上传文件')
+        if (!file.endsWith(".html")) {
+          this.QN_Instance.put(content, file);
         }
         //   compilation.hooks.processAssets.tap(
         //     {

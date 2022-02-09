@@ -1,13 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2021-12-19 23:06:05
- * @LastEditTime: 2021-12-21 00:09:12
+ * @LastEditTime: 2022-02-09 21:51:08
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \hupu-spider\src\utils\qiniu.ts
  */
 const qiniu = require("qiniu");
-// const ora = require('ora');
+const ora = require('ora');
 // const accessKey = 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP';
 // const secretKey = 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-';
 // const bucket = 'benjamin0809-cdn';
@@ -101,7 +101,7 @@ class Qiniu {
    */
   put(data, filename) {
      // 文件上传
-    //  const spinner = ora(`上传文件${filename}...`).start();
+     const spinner = ora(`上传文件${filename}...`).start();
     return new Promise((resolve, reject) => {
       this.formUploader.put(
         this.token,
@@ -111,7 +111,7 @@ class Qiniu {
         async  (respErr, respBody, respInfo) => {
           if (respErr) {
             reject(respErr);
-            // spinner.fail(`文件：${key}，上传失败！`);
+            spinner.fail(`文件：${key}，上传失败！`);
             throw respErr;
           }
           if (respInfo.statusCode == 200) {
@@ -123,10 +123,10 @@ class Qiniu {
                 filename
               ),
             });
-            // spinner.succeed(`文件：${key}，上传成功！`);
+            spinner.succeed(`文件：${filename}，上传成功！`);
           } else {
             console.error(respBody);
-            // spinner.fail(`文件：${key}，上传失败！`);
+            spinner.fail(`文件：${filename}，上传失败！`);
             reject(respBody);
           }
         }
