@@ -11,14 +11,21 @@ const QiniuUploadPlugin = require("./plugins/QiniuUploadPlugin");
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const PurgecssWebpackPlugin = require('purgecss-webpack-plugin') 
 
+const propPlugins = process.env.NODE_ENV === 'prod' ?
+    [new QiniuUploadPlugin({
+      accessKey : 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP',
+      secretKey : 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-',
+      bucket : 'benjamin0809-cdn',
+      publicBucketDomain: 'https://cdn.popochiu.com'
+    })] : [];
 const config = {
   mode: "development",
   entry: { index: "./src/index.js", main: "./src/main.js" },
   output: {
-    // clean: true,
+    clean: true,
     filename: "[name].[contenthash].js",
     path: path.join(__dirname, "dist"),
-    publicPath: 'https://cdn.popochiu.com/',
+    // publicPath: 'https://cdn.popochiu.com/',
   },
   devtool: "source-map",
   devServer: {
@@ -53,7 +60,7 @@ const config = {
     minimize: true,
     minimizer: [new TerserPlugin()],
   },
-  module: {
+  module: { 
     rules: [
       {
         test: /\.ts$/,
@@ -100,7 +107,7 @@ const config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: "babel-loader",
+            loader: "babel-loader", 
             options: {
               presets: ["@babel/preset-env"],
             },
@@ -118,15 +125,9 @@ const config = {
   },// const accessKey = 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP';
   // const secretKey = 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-';
   // const bucket = 'benjamin0809-cdn';
-  plugins: [
-      new QiniuUploadPlugin({
-        accessKey : 'jfxJjeElvLIUgldn-OmFQrSL4x4WTbZNRSkxEWZP',
-        secretKey : 'hCxKrvlFocCyjeP0WQ-gJerutHlb-_gG8-iUJ8S-',
-        bucket : 'benjamin0809-cdn',
-        publicBucketDomain: 'https://cdn.popochiu.com'
-      }),
+  plugins: [ 
     new DelCommentPlugin(),
-    new RmFilePlugin(),
+    // new RmFilePlugin(),
     new MomentLocalesPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].[hash:8].css",
@@ -136,7 +137,7 @@ const config = {
       template: "./src/index.html",
     }),
     // new BundleAnalyzerPlugin()
-  ],
+  ].concat(propPlugins),
     resolveLoader: {
       modules: ["loaders", "node_modules"],
     },
