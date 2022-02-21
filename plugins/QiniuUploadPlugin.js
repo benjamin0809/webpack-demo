@@ -6,6 +6,15 @@
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \webpack-demo\plugins\QiniuUploadPlugin.js
  */
+
+
+const pluginName = "QiniuUploadPlugin";
+const printHook = (compiler, hook) => {
+    compiler.hooks[hook].tap(pluginName, (compilation) => {
+        console.log(`webpack 构建正在${hook}！`);
+      });
+}
+
 const { sources } = require("webpack");
 const Qiniu = require("./qiniu");
 class QiniuUploadPlugin {
@@ -32,6 +41,10 @@ class QiniuUploadPlugin {
     compiler.hooks.emit.tap("QiniuUploadPlugin", () => {
       console.log('emit')
     })
+    Object.keys(compiler.hooks).forEach((key) => {
+            printHook(compiler, key)
+        })  
+    
     compiler.hooks.assetEmitted.tap(
       "QiniuUploadPlugin",
       (file, { content, source, outputPath, compilation, targetPath }) => {
@@ -67,6 +80,9 @@ class QiniuUploadPlugin {
         //   );
       }
     );
+    compiler.hooks.done.tap("QiniuUploadPlugin", () => {
+        console.log('done')
+      })
   }
 }
 

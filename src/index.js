@@ -5,8 +5,12 @@ const msg = 'hello world'
 console.log(msg)
 import { info } from './demo' 
 import { getUserName } from './common/utils'
+import request from './common/request'
 info()
 
+requestAnimationFrame(() =>{
+  request()
+})
 export const getFullName = () => getUserName('index') + ';894306909@qq.com' 
 
 const div = document.createElement('div')
